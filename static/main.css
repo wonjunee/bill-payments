@@ -47,6 +47,7 @@ label {
 
 table.summary {
     border-collapse: collapse;
+    font-size: 14px;
 }
 
 table.summary, table.summary tr, table.summary td {
@@ -67,8 +68,7 @@ td.label {
 
 td.bills {
     text-align: center;
-    padding-left:1%;
-    padding-right:1%;
+    width: 65px;
     font-size: 15px;
     font-weight: bold;
 }
@@ -259,11 +259,6 @@ a.menu-item + a.menu-item {
     color: #999;
 }
 
-table.summary {
-    text-align: center;
-    font-size: 14px;
-}
-
 tr.heading {
     font-weight: bold;
 }
@@ -281,12 +276,14 @@ h3.completed-tasks {
     margin-bottom: 5px;
 }
 
+td.date {
+    text-align: right;
+}
 a.summary-date {
     font-size: 14px;
     font-weight: bold;
     text-decoration: none;
     color: #999;
-    text-align:right;
 }
 
 .goback-button {
