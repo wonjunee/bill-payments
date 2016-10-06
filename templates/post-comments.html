@@ -1,0 +1,47 @@
+  <div class="post">
+    <div class="post-heading">
+      <a href="/{{p.key().id()}}"" class="post-title">
+        {{p.subject}}
+      </a>
+
+      <div class="post-date">
+        written by {{p.username}} - {{p.created.strftime("%b %d, %Y")}}
+      {% if username == "wonjunee" %}
+      <a href="/{{p.key().id()}}/edit" class="post-edit">
+        Edit
+      </a>
+      <a href="/{{p.key().id()}}/delete" class="post-edit">
+        Delete
+      </a>
+      {% endif %}
+      </div>
+    </div>
+
+    {{p.render() | safe}}
+ 
+    <br>
+    <div class="comment-heading">
+      {{p.comments.count()}} {% if p.comments.count() > 1 %}Comments{% else %}Comment{% 
+      endif %}
+    </div>
+    <div class="comments-contents">
+      {% for comment in p.comments %}
+        {{comment.render() | safe}} - <b>{{comment.username}}</b> <br>
+        {{comment.created.strftime("%b %d, %Y")}}
+        <a href="/{{p.key().id()}}/comment/{{comment.key().id()}}/edit" class="comment-edit">
+          Edit
+        </a>
+        <a href="/{{p.key().id()}}/comment/{{comment.key().id()}}/delete" class="comment-edit">
+          Delete
+        </a><br>
+        <br>
+      {% endfor %}
+    </div>
+
+    <a href="/{{p.key().id()}}/comment" class="post-edit">
+      Add a comment
+    </a>
+    
+
+    </div>
+

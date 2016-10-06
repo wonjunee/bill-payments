@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="/static/main.css" />
+
+  <title>Wonjun - School Planning</title>
+</head>
+
+<body>
+  <a href="/" class="main-title">
+    Wonjun's schedule
+  </a>
+
+  <div class="login-area">
+    {% if user %}
+      {{user.name}} (<a class="login-link" href="/logout">logout</a>)
+    {% else %}
+      <a class="login-link" href="/login">login</a>
+      |
+      <a class="login-link" href="/signup">signup</a>
+    {% endif %}
+  </div>
+  <hr>
+  <div class="menu">
+    <a href="/" class="menu-item">
+      Home
+    </a>
+    <a href="/summary" class="menu-item">
+      Summary
+    </a>
+  </div>
+  <hr>
+  <br>
+  <div id="content">
+  {% block content %}
+  {% endblock %}
+  </div>
+</body>
+
+</html>
+

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% if user.name == "wonjunee" %}
+  <a href="/newpost" class="sub-title">
+    Create A New Post
+  </a>
+  {% endif %}
+
+  {% for p in posts %}
+
+    {{ p.render_comments(user.name) | safe }}
+
+    </div>
+    <br><br>
+  {% endfor %}
+
+{% endblock %}

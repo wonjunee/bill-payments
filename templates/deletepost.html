@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <br>
+  <h3 class="sub-title">Are you sure you want to delete this post?</h3>
+  <div style="margin-left:20%">
+    <label>
+      <div class="post-title">subject: {{p.subject}}</div>
+    </label>
+
+    {{p.render() | safe}}
+  </div>
+
+    <br>
+
+    <form method="post">
+      <label class="yesorno"> Yes
+        <input type="radio" name="q" value="yes">
+      </label>
+
+      <label class="yesorno"> No
+        <input type="radio" name="q" value="no">
+      </label>
+      <br>
+      <div class="sub-title">
+      <input type="submit">
+      </div>
+    </form>
+{% endblock %}

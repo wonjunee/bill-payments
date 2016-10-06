@@ -1,0 +1,263 @@
+body {
+    position: relative;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+
+    width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+    color: #333;
+}
+
+.login-area {
+    font-size: 13px;
+    color: gray;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.login-link {
+    color: gray;
+    text-decoration: none;
+}
+
+.login-link:visited {
+    color: gray;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.error {
+    color: red;
+}
+
+label {
+  display: block;
+  font-size: 15px;
+}
+
+td.label {
+    font-size: 15px;
+    font-weight: bold;
+    padding-right:20px;
+}
+
+tr  {
+    line-height: 15px;
+}
+
+label + label {
+    margin-top: 20px;
+}
+
+input[type=text] {
+    width: 500px;
+    font-size: 20px;
+    padding: 2px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+textarea {
+  width: 500px;
+  height: 400px;
+  font-size: 15px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+textarea.todolist {
+  width: 500px;
+  height: 20px;
+}
+
+textarea.comment {
+  width: 500px;
+  height: 100px;
+}
+
+input[type=submit] {
+  font-size: 15px;
+}
+
+input[type=text], input[type=password] {
+  font-size: 15px;
+  width: 200px;
+}
+
+.main-title {
+    display: block;
+    color: #222;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    text-decoration: none;
+}
+
+.sub-title {
+    display: block;
+    color: #222;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    text-decoration: none;
+}
+
+label.yesorno {
+    display: block;
+    color: #222;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    text-decoration: none;
+}
+
+
+.menu {
+    text-align: center;
+}
+
+a.menu-item {
+    color: #222;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.menu-item + a.menu-item {
+    margin-left: 30px;
+}
+
+.main-button {
+    display: block;
+    color: #999;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    text-decoration: none;
+}
+
+.post + .post {
+    margin-top: 15px;
+}
+
+.post-heading {
+    position: relative;
+    border-bottom: 3px solid #666;
+}
+
+.post-title {
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #222;
+}
+
+.post-title.space-below {
+    margin-bottom: 10px;
+}
+
+.post-edit {
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #999;
+}
+
+
+.post-date {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    color: #999;
+
+}
+
+.post-content {
+    margin-top: 1px;
+}
+
+.original-post {
+    font-size: 15px;
+    margin-left: 5%;
+}
+
+.pre-label {
+    font-size: 20px;
+    margin-left: 5%;
+    color: #777;
+}
+
+.input-login {
+    width: 500px;
+    font-size: 20px;
+    padding: 2px;
+    font-family: monospace;
+}
+
+.comment-heading {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #666;
+}
+
+.comment-edit {
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #999;
+}
+
+table.summary {
+    text-align: center;
+    font-size: 14px;
+}
+
+tr.heading {
+    font-weight: bold;
+}
+
+h1.summary-title {
+    text-align: center;
+}
+
+h3.summary-content {
+    text-align: center;
+}
+
+h3.completed-tasks {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+a.summary-date {
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #999;
+}
+
+.goback-button {
+    display: block;
+    color: #222;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 20px;
+    text-decoration: none;    
+}
