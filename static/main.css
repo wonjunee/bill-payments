@@ -286,6 +286,7 @@ a.summary-date {
     font-weight: bold;
     text-decoration: none;
     color: #999;
+    text-align:right;
 }
 
 .goback-button {
