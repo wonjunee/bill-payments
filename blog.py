@@ -139,7 +139,7 @@ BASECONTENT = [
     "Cox",
     "Crunch",
     "NY Times",
-    "Student Loan",
+    "Loan",
     "On Demand",
     "Car PMT",
     "Car INS",
@@ -154,7 +154,7 @@ def parse_content(content):
             a = re.findall(r'[0-9]+', c)
             num = "0.00"
             if a:
-                num = a[0]
+                num = "{}.{}".format(a[0],a[1])
             lis.append([c.split(":")[0], num])
     return lis
 
