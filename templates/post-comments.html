@@ -1,44 +1,44 @@
   <div class="post">
     <div class="post-heading">
-      <a href="/{{p.key().id()}}"" class="post-title">
-        {{p.subject}}
+      <a href="/{{post.key().id()}}"" class="post-title">
+        {{post.subject}}
       </a>
 
       <div class="post-date">
-        written by {{p.username}} - {{p.created.strftime("%b %d, %Y")}}
+        written by {{post.username}} - {{post.created.strftime("%b %d, %Y")}}
       {% if username == "wonjunee" %}
-      <a href="/{{p.key().id()}}/edit" class="post-edit">
+      <a href="/{{post.key().id()}}/edit" class="post-edit">
         Edit
       </a>
-      <a href="/{{p.key().id()}}/delete" class="post-edit">
+      <a href="/{{post.key().id()}}/delete" class="post-edit">
         Delete
       </a>
       {% endif %}
       </div>
     </div>
 
-    {{p.render() | safe}}
+    {{post.render() | safe}}
  
     <br>
     <div class="comment-heading">
-      {{p.comments.count()}} {% if p.comments.count() > 1 %}Comments{% else %}Comment{% 
+      {{post.comments.count()}} {% if post.comments.count() > 1 %}Comments{% else %}Comment{% 
       endif %}
     </div>
     <div class="comments-contents">
-      {% for comment in p.comments %}
+      {% for comment in post.comments %}
         {{comment.render() | safe}} - <b>{{comment.username}}</b> <br>
         {{comment.created.strftime("%b %d, %Y")}}
-        <a href="/{{p.key().id()}}/comment/{{comment.key().id()}}/edit" class="comment-edit">
+        <a href="/{{post.key().id()}}/comment/{{comment.key().id()}}/edit" class="comment-edit">
           Edit
         </a>
-        <a href="/{{p.key().id()}}/comment/{{comment.key().id()}}/delete" class="comment-edit">
+        <a href="/{{post.key().id()}}/comment/{{comment.key().id()}}/delete" class="comment-edit">
           Delete
         </a><br>
         <br>
       {% endfor %}
     </div>
 
-    <a href="/{{p.key().id()}}/comment" class="post-edit">
+    <a href="/{{post.key().id()}}/comment" class="post-edit">
       Add a comment
     </a>
     

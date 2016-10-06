@@ -133,6 +133,60 @@ class User(db.Model):
 
 
 ##### blog stuff
+BASECONTENT = [
+    "Verizon",
+    "Dominion",
+    "Cox",
+    "Crunch",
+    "NY Times",
+    "Student Loan",
+    "On Demand",
+    "Car PMT",
+    "Car INS",
+    "To Mom",
+    "Other"]
+
+def parse_content(content):
+    content = content.split("\n")
+    lis = []
+    for c in content:
+        if c:
+            a = re.findall(r'[0-9]+', c)
+            num = "0.00"
+            if a:
+                num = a[0]
+            lis.append([c.split(":")[0], num])
+    return lis
+
+def get_tdclass(num):
+    if num == "0.00":
+        tdclass="unpaid"
+    else:
+        tdclass="paid"
+    return tdclass
+
+def show_post_content(content):
+    content = parse_content(content)
+    st = []
+    for i in content:
+        tdclass = get_tdclass(i[1])
+        st.append( """
+        <tr>
+        <td class="label">{0}</td>
+        <td class="{1}">{2}</td>
+        </tr>
+        """.format(i[0], tdclass, i[1]))
+    return st
+
+def summary_post(content):
+    content = parse_content(content)
+    st = []
+    for i in content:
+        tdclass = get_tdclass(i[1])
+        st.append( """
+            <td class="{0}">{1}</td>
+            """.format(tdclass, i[1]))
+    return st    
 
 def blog_key(name = 'default'):
     return db.Key.from_path('blogs', name)
@@ -140,36 +194,24 @@ def blog_key(name = 'default'):
 class Post(db.Model):
     subject = db.StringProperty(required = True)
 
-    gre_words = db.IntegerProperty(required = True)
-    gre_essays = db.IntegerProperty(required = True)
-    gre_verbal = db.IntegerProperty(required = True)
-    gre_math = db.IntegerProperty(required = True)
-    school_research = db.IntegerProperty(required = True)
-    sop = db.IntegerProperty(required = True)
-    other = db.IntegerProperty(required = True)
-
-    gre_words_more = db.TextProperty()
-    gre_essays_more = db.TextProperty()
-    gre_verbal_more = db.TextProperty()
-    gre_math_more = db.TextProperty()
-    school_research_more = db.TextProperty()
-    sop_more = db.TextProperty()
-    other_more = db.TextProperty()
+    content = db.TextProperty(required = True)
     
     created = db.DateTimeProperty(auto_now_add = True)
 
     username = db.StringProperty(required = True)
 
-    total = db.IntegerProperty()
-
     def render(self):
         # self._render_text = self.content.replace('\n', '<br>')
-        self.total = self.gre_words + self.gre_essays + self.gre_verbal + self.gre_math + self.school_research + self.sop + self.other
-        return render_str("post.html", p = self)
+        return render_str("post.html", post = self)
 
     def render_comments(self, username):
-        self.total = self.gre_words + self.gre_essays + self.gre_verbal + self.gre_math + self.school_research + self.sop + self.other
-        return render_str("post-comments.html", p = self, username = username)
+        return render_str("post-comments.html", post = self, username = username)
+
+    def _show_post_content(self):
+        return show_post_content(self.content)
+
+    def _summary_post(self):
+        return summary_post(self.content)
 
     @property
     def comments(self):
@@ -194,35 +236,18 @@ class PostPage(BlogHandler):
 
         self.render("permalink.html", post = post)
 
-def checklist(todo):
-    gre_words = 0
-    gre_essays = 0
-    gre_verbal = 0
-    gre_math = 0
-    school_research = 0
-    sop = 0
-    other = 0
-    if "gre-words" in todo:
-        gre_words = 1
-    if "gre-essays" in todo:
-        gre_essays = 1
-    if "gre-verbal" in todo:
-        gre_verbal = 1
-    if "gre-math" in todo:
-        gre_math = 1
-    if "school-research" in todo:
-        school_research = 1
-    if "sop" in todo:
-        sop = 1
-    if "other" in todo:
-        other = 1
-    return [gre_words, gre_essays, gre_verbal, gre_math, school_research, sop, other]
+def show_content():
+    st = ""
+    for i in BASECONTENT:
+        st += "{}:\n".format(i)
+    return st
 
 class NewPost(BlogHandler):
     def get(self):
         if self.user:
             if self.user.name == "wonjunee":
-                self.render("newpost.html")
+                content = show_content().strip()
+                self.render("newpost.html", content=content)
             else:
                 self.redirect("/notallowed0")
         else:
@@ -232,44 +257,17 @@ class NewPost(BlogHandler):
         if not self.user:
             self.redirect('/')
 
-        subject = self.request.get('subject')
-
-        todo = self.request.get('todo', allow_multiple=True)
-        gre_words, gre_essays, gre_verbal, gre_math, school_research, sop, other = checklist(todo)
-        
         username = self.user.name
-
-        gre_words_more = self.request.get('gre-words')
-        gre_essays_more = self.request.get('gre-essays')
-        gre_verbal_more = self.request.get('gre-verbal')
-        gre_math_more = self.request.get('gre-math')
-        school_research_more = self.request.get('school-research')
-        sop_more = self.request.get('sop')
-        other_more = self.request.get('other')
-
+        subject = self.request.get('subject')
+        content = self.request.get('content')
+        
         if subject:
-            p = Post(parent = blog_key(), subject = subject,
-                username = username,
-                gre_words = gre_words,
-                gre_essays = gre_essays,
-                gre_verbal = gre_verbal,
-                gre_math = gre_math,
-                school_research = school_research,
-                sop = sop,
-                other = other,
-                gre_words_more = gre_words_more,
-                gre_essays_more = gre_essays_more,
-                gre_verbal_more = gre_verbal_more,
-                gre_math_more = gre_math_more,
-                school_research_more = school_research_more,
-                sop_more = sop_more,
-                other_more = other_more)
-
+            p = Post(parent = blog_key(), username = username, subject = subject, content = content)
             p.put()
             self.redirect('/%s' % str(p.key().id()))
         else:
             error = "subject, please!"
-            self.render("newpost.html", subject=subject, username = username,  error=error)
+            self.render("newpost.html", subject=subject, content=content, username = username,  error=error)
 
 # A class for editing a post
 class EditPost(BlogHandler):
@@ -279,15 +277,8 @@ class EditPost(BlogHandler):
 
         if self.user:
         	if self.user.name == post.username:
-	            self.render("editpost.html", post = post, subject=post.subject,
-                    gre_words_more = post.gre_words_more,
-                    gre_essays_more = post.gre_essays_more,
-                    gre_verbal_more = post.gre_verbal_more,
-                    gre_math_more = post.gre_math_more,
-                    school_research_more = post.school_research_more,
-                    sop_more = post.sop_more,
-                    other_more = post.other_more,
-                    )
+	            self.render("editpost.html", post = post, subject=post.subject, content=post.content)
+
 	        else:
 	        	self.redirect("/notallowed0")
         else:
@@ -298,20 +289,8 @@ class EditPost(BlogHandler):
             self.redirect('/')
 
         subject = self.request.get('subject')
-
         username = self.user.name
-
-        todo = self.request.get('todo', allow_multiple=True)
-        gre_words, gre_essays, gre_verbal, gre_math, school_research, sop, other = checklist(todo)
-
-        gre_words_more = self.request.get('gre-words')
-        gre_essays_more = self.request.get('gre-essays')
-        gre_verbal_more = self.request.get('gre-verbal')
-        gre_math_more = self.request.get('gre-math')
-        school_research_more = self.request.get('school-research')
-        sop_more = self.request.get('sop')
-        other_more = self.request.get('other')
-
+        content = self.request.get('content')
 
         if subject:
             # find a post from the database
@@ -321,23 +300,7 @@ class EditPost(BlogHandler):
             # Update the post
             p.subject = subject
             p.username = username
-
-            p.gre_words = gre_words
-            p.gre_essays = gre_essays
-            p.gre_verbal = gre_verbal
-            p.gre_math = gre_math
-            p.school_research = school_research
-            p.sop = sop
-            p.other = other
-
-            p.gre_words_more = gre_words_more
-            p.gre_essays_more = gre_essays_more
-            p.gre_verbal_more = gre_verbal_more
-            p.gre_math_more = gre_math_more
-            p.school_research_more = school_research_more
-            p.sop_more = sop_more
-            p.other_more = other_more
-
+            p.content = content
             p.put()
 
             # Redirect to the single post page with an updated post
@@ -345,14 +308,7 @@ class EditPost(BlogHandler):
 
         else:
             error = "subject, please!"
-            self.render("editpost.html", subject=subject,
-                    gre_words_more = gre_words_more,
-                    gre_essays_more = gre_essays_more,
-                    gre_verbal_more = gre_verbal_more,
-                    gre_math_more = gre_math_more,
-                    school_research_more = school_research_more,
-                    sop_more = sop_more,
-                    other_more = other_more,
+            self.render("editpost.html", subject=subject, content=content,
                     error = error)
 
 # A class for deleting a post
@@ -440,7 +396,7 @@ class Register(Signup):
         if u:
             msg = 'That user already exists.'
             self.render('signup-form.html', error_username = msg)
-        else:
+        elif self.username == "wonjunee":
             # Create a new User instance
             u = User.register(self.username, self.password, self.email)
 
@@ -453,7 +409,9 @@ class Register(Signup):
 
             # Redirect to the welcome page
             self.redirect('/welcome')
-
+        else:
+            msg = 'Not Allowed'
+            self.render('signup-form.html', error_username = msg)
 class Login(BlogHandler):
     def get(self):
         self.render('login-form.html')
@@ -463,7 +421,7 @@ class Login(BlogHandler):
         password = self.request.get('password')
 
         u = User.login(username, password)
-        if u:
+        if u and username == "wonjunee":
             self.login(u)
             self.redirect('/')
         else:
@@ -504,7 +462,7 @@ class NewComment(BlogHandler):
             "newcomment.html",
             subject=subject,
             pkey=post.key(),
-            p = post
+            post = post
             )
 
     def post(self, post_id):
@@ -535,7 +493,7 @@ class NewComment(BlogHandler):
                     "newcomment.html",
                     subject=post.subject,
                     pkey=post.key(),
-                    p = post,
+                    post = post,
                     error=error)
         else:
             self.redirect("/login")
@@ -623,30 +581,7 @@ class Summary(BlogHandler):
     def get(self):
         if self.user:
             posts = Post.all().order('-created')
-            gre_words = 0
-            gre_essays = 0
-            gre_verbal = 0
-            gre_math = 0
-            school_research = 0
-            sop = 0
-            other = 0
-            for post in posts:
-                gre_words += post.gre_words
-                gre_essays += post.gre_essays
-                gre_verbal += post.gre_verbal
-                gre_math += post.gre_math
-                school_research += post.school_research
-                sop += post.sop
-                other += post.other
-
-            self.render('summary.html', posts = posts, 
-                gre_words = gre_words,
-                gre_essays = gre_essays,
-                gre_verbal = gre_verbal,
-                gre_math = gre_math,
-                school_research = school_research,
-                sop = sop,
-                other = other)
+            self.render('summary.html', posts = posts, bills = BASECONTENT)
         else:
             self.redirect('/login')
 
